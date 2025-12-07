@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Worksheet Generator — Classroom Tools</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- tiny html2pdf (for PDF export) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+  <div class="app">
+    <aside class="panel">
+      <header>
+        <h1>Worksheet Maker</h1>
+        <p class="muted">Fast, creative worksheets for teachers & students</p>
+      </header>
+
+      <section class="control-group">
+        <label>Template</label>
+        <select id="templateSelect">
+          <option value="math">Math Problems</option>
+          <option value="mcq">Multiple Choice</option>
+          <option value="vocab">Vocabulary - Definitions & Fill</option>
+          <option value="reading">Reading Comprehension</option>
+          <option value="matching">Matching Pairs</option>
+          <option value="fillblank">Fill-in-the-Blanks</option>
+        </select>
+      </section>
+
+      <section class="control-group two">
+        <div>
+          <label>Questions</label>
+          <input id="numQ" type="number" min="1" max="40" value="8">
+        </div>
+        <div>
+          <label>Difficulty</label>
+          <select id="difficulty">
+            <option value="easy">Easy</option>
+            <option value="medium" selected>Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="control-group">
+        <label>Theme</label>
+        <select id="themeSelect">
+          <option value="default">Clean (Default)</option>
+          <option value="chalk">Chalkboard</option>
+          <option value="pastel">Pastel Fun</option>
+          <option value="mono">Minimal Mono</option>
+        </select>
+      </section>
+
+      <section class="control-group">
+        <label>Header / Title</label>
+        <input id="titleInput" type="text" placeholder="Worksheet Title" value="Weekly Worksheet">
+      </section>
+
+      <section class="control-group">
+        <label>Optional: Add your own vocabulary list (comma separated)</label>
+        <input id="customList" type="text" placeholder="apple, banana, democracy, ..." />
+      </section>
+
+      <div class="buttons">
+        <button id="generateBtn" class="primary">Generate</button>
+        <button id="exportPdfBtn">Export PDF</button>
+        <button id="printBtn">Print</button>
+      </div>
+
+      <div class="small-controls">
+        <button id="saveJson">Save JSON</button>
+        <input id="loadJsonFile" type="file" accept=".json" />
+      </div>
+
+      <footer class="muted small">Tip: click a question in preview to edit text directly.</footer>
+    </aside>
+
+    <main class="preview-area">
+      <div id="worksheetPreview" class="worksheet">
+        <!-- Generated worksheet will render here -->
+      </div>
+    </main>
+  </div>
+
+  <!-- App JS -->
+  <script src="app.js"></script>
+</body>
+</html>
