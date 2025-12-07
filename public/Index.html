@@ -3,23 +3,28 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Worksheet Generator — Classroom Tools</title>
+  <title>Worksheet Generator — Pro</title>
 
-  <!-- Google Fonts -->
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <!-- CSS -->
+  <!-- Styles -->
   <link rel="stylesheet" href="styles.css">
 
-  <!-- tiny html2pdf (for PDF export) -->
+  <!-- Client-side libs -->
+  <!-- html2pdf for PDF export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+  <!-- PapaParse for CSV import -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <!-- QR generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 </head>
 <body>
   <div class="app">
     <aside class="panel">
       <header>
-        <h1>Worksheet Maker</h1>
-        <p class="muted">Fast, creative worksheets for teachers & students</p>
+        <h1>Worksheet Maker — Pro</h1>
+        <p class="muted">Multiple templates · Answer key · PDF export · Save / Load</p>
       </header>
 
       <section class="control-group">
@@ -27,9 +32,9 @@
         <select id="templateSelect">
           <option value="math">Math Problems</option>
           <option value="mcq">Multiple Choice</option>
-          <option value="vocab">Vocabulary - Definitions & Fill</option>
-          <option value="reading">Reading Comprehension</option>
+          <option value="vocab">Vocabulary</option>
           <option value="matching">Matching Pairs</option>
+          <option value="reading">Reading Comprehension</option>
           <option value="fillblank">Fill-in-the-Blanks</option>
         </select>
       </section>
@@ -37,7 +42,7 @@
       <section class="control-group two">
         <div>
           <label>Questions</label>
-          <input id="numQ" type="number" min="1" max="40" value="8">
+          <input id="numQ" type="number" min="1" max="50" value="10">
         </div>
         <div>
           <label>Difficulty</label>
@@ -52,21 +57,23 @@
       <section class="control-group">
         <label>Theme</label>
         <select id="themeSelect">
-          <option value="default">Clean (Default)</option>
+          <option value="default">Clean</option>
           <option value="chalk">Chalkboard</option>
-          <option value="pastel">Pastel Fun</option>
-          <option value="mono">Minimal Mono</option>
+          <option value="pastel">Pastel</option>
+          <option value="mono">Minimal</option>
         </select>
       </section>
 
       <section class="control-group">
-        <label>Header / Title</label>
+        <label>Title</label>
         <input id="titleInput" type="text" placeholder="Worksheet Title" value="Weekly Worksheet">
       </section>
 
       <section class="control-group">
-        <label>Optional: Add your own vocabulary list (comma separated)</label>
+        <label>Custom word list (CSV or comma separated)</label>
         <input id="customList" type="text" placeholder="apple, banana, democracy, ..." />
+        <input id="csvFile" type="file" accept=".csv" />
+        <small class="muted">You can drag in a single-column CSV of vocabulary words.</small>
       </section>
 
       <div class="buttons">
@@ -76,21 +83,37 @@
       </div>
 
       <div class="small-controls">
-        <button id="saveJson">Save JSON</button>
-        <input id="loadJsonFile" type="file" accept=".json" />
+        <button id="saveJson">Save to server</button>
+        <input id="loadId" type="text" placeholder="Load by id (eg. ws-1600000000)">
+        <button id="loadBtn">Load</button>
       </div>
 
-      <footer class="muted small">Tip: click a question in preview to edit text directly.</footer>
+      <div class="small-controls">
+        <button id="toggleKey">Toggle Answer Key</button>
+        <button id="copyHtml">Copy HTML</button>
+      </div>
+
+      <div class="qr-wrap">
+        <label>Worksheet Link (QR)</label>
+        <canvas id="qrCanvas" width="150" height="150"></canvas>
+      </div>
+
+      <footer class="muted small">Tip: edit questions directly in the preview. Use "Save to server" to keep copies.</footer>
     </aside>
 
     <main class="preview-area">
-      <div id="worksheetPreview" class="worksheet">
-        <!-- Generated worksheet will render here -->
-      </div>
+      <div id="worksheetPreview" class="worksheet"></div>
+      <aside class="answer-key" id="answerKey" aria-hidden="true">
+        <h3>Answer Key</h3>
+        <div id="answerList"></div>
+        <div style="margin-top:8px;">
+          <button id="printKey">Print Key</button>
+          <button id="downloadKey">Download Key (JSON)</button>
+        </div>
+      </aside>
     </main>
   </div>
 
-  <!-- App JS -->
   <script src="app.js"></script>
 </body>
 </html>
